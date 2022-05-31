@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useWalletConnect } from "../hooks/Authentication";
 import {
@@ -15,22 +16,18 @@ import {
 
 const Login = () => {
   const [open, setOpen] = React.useState(false);
-  const { connectWallet, disconnetWallet, isConnected } = useWalletConnect()
+  const { connectWallet } = useWalletConnect()
+  const router = useRouter()
 
-  const check = async() => {
-    const data = await isConnected()
-    console.log('data' ,data)
-  }
-
-  const Connect = () => {
+  const Connect = async () => {
     try {
-      connectWallet()
+      const status = await connectWallet()
+      if(status) router.push('/home')
     } catch (error: any) {
       alert(error.message)
     }
   }
 
-  check()
   return (
     <ParentCotainer>
       <LeftChild>
